@@ -1,0 +1,64 @@
+package kasirAja;
+
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+public class LoginDDT {
+    //login menggunakan data driven test (DDT)
+    @Test
+    public void login_ddt(){
+        WebDriver driver;
+        String baseURL = "https://kasirdemo.belajarqa.com/";
+
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions opt = new ChromeOptions();
+        opt.setHeadless(false);
+
+        String csvDir = System.getProperty("user.dir")+"/src/test/data/test-data.csv";
+
+        try(CSVReader reader = new CSVReader(new FileReader(csvDir))){
+            String[] nextLine;
+            while ((nextLine = reader.readNext()) != null){
+                String email = nextLine[0]; //read column 1 for email in csv
+                String password = nextLine[1]; //read column 2 for email in csv
+                String status = nextLine[2]; //read column 3 for email in csv
+
+                driver = new ChromeDriver(opt);
+                driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS); //set timeout for web driver on waiting elements
+                driver.manage().window().maximize();
+                driver.get(baseURL);
+
+                //filling the form
+                driver.findElement(By.id("email")).sendKeys(email);
+                driver.findElement(By.id("password")).sendKeys(password);
+                driver.findElement(By.xpath("//button[@type='submit']")).click();
+
+                //assetion
+                if (status.equals("success")){
+                    driver.findElement(By.xpath("//div[contains(text(), 'dashboard')]"));
+                    String username = driver.findElement(By.xpath("//dd[contains(text(), 'hai')]/preceding-sibling::dt")).getText();
+                    Assert.assertEquals(username, "tdd-selenium");
+                }else{
+                    String errorMsg = driver.findElement(By.xpath("//div[@role='alert']")).getText();
+                    Assert.assertEquals(errorMsg, "Kredensial yang Anda berikan salah");
+                }
+                driver.close();
+            }
+        }catch (CsvValidationException | IOException e){
+            throw new RuntimeException(e);
+        }
+
+
+    }
+}
