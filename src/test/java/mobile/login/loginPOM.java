@@ -35,7 +35,7 @@ public class loginPOM {
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
         loginPage loginPage = new loginPage(driver);
-        dashboardPage dashboardPage = new dashboardPage(driver);
+        //uncommenthis dashboardPage dashboardPage = new dashboardPage(driver);
 
         //get elements and input username
         loginPage.inputUsername("email@gmail.com");
@@ -63,7 +63,7 @@ public class loginPOM {
         driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
 
         loginPage loginPage = new loginPage(driver);
-        dashboardPage dashboardPage = new dashboardPage(driver);
+       //uncommenthis dashboardPage dashboardPage = new dashboardPage(driver);
 
         //get elements and input username
         loginPage.inputUsername("email@gmail.com");

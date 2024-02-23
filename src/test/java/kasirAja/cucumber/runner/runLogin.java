@@ -7,7 +7,8 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = "src/test/java/kasirAja/cucumber/features",
         glue = "kasirAja.cucumber.stepDef",
-        plugin = {"html:target/HTML_report.html"}
+        plugin = {"html:target/HTML_report.html"},
+        tags = "@TDD"
 )
 
 public class runLogin{

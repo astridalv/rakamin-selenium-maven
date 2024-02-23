@@ -32,7 +32,6 @@ public class login {
     @When("input username")
     public void inputUsername() {
         driver.findElement(By.id("email")).sendKeys("tdd-selenium@gmail.com");
-        throw new io.cucumber.java.PendingException();
     }
 
     @And("Input Password")
@@ -59,10 +58,11 @@ public class login {
 
     }
 
-    @Then("User Get Error Message")
-    public void userGetErrorMessage() {
+    @Then("User get error message")
+    public void user_get_error_message() {
         String errorMsg = driver.findElement(By.xpath("//div[@role='alert']")).getText();
         Assert.assertEquals(errorMsg, "Kredensial yang Anda berikan salah");
         driver.close();
     }
+
 }
